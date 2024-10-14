@@ -15,28 +15,32 @@ def fetch_links(page):
     return links_list
 
 def wikipedia_game_solver(start_page,target_page):
-   print("working on it")
-   start_time = time.time()
+    print("working on it")
+    start_time = time.time()
 
-   queue = Queue() #which items to check next
-   visited = set() #keep track of visited links
-   parent = {} #keep track of parent
+    queue = Queue() #which items to check next
+    visited = set() #keep track of visited links
+    parent = {} #keep track of parent
 
-   queue.put(start_page.title)
-   visited.add(start_page.title)
+    queue.put(start_page.title)
+    visited.add(start_page.title)
 
-   while not queue.empty():
-    current_page_title = queue.get()
-    if current_page_title == target_page.title:
-        break
-    current_page = wiki.page(current_page_title)
-    links = fetch_links(current_page)
+    while not queue.empty():
+        current_page_title = queue.get()
+        
+        if current_page_title == target_page.title:
+            break
+    
+    
+        current_page = wiki.page(current_page_title)
+        links = fetch_links(current_page)
 
-    for link in links:
-        if link not in visited:
-            queue.put(link)
-            visited.add(link)
-            parent[link]= current_page_title
+        for link in links:
+            if link not in visited:
+                queue.put(link)
+                visited.add(link)
+                parent[link]= current_page_title
+    
     path = []
     page_title = target_page.title
     while page_title != start_page.title:
@@ -52,4 +56,5 @@ def wikipedia_game_solver(start_page,target_page):
 
 start_page = wiki.page("Pasadena High School (California)")
 target_page = wiki.page("National Defense Act of 1916")
-print(wikipedia_game_solver(start_page, target_page))
+path = wikipedia_game_solver(start_page, target_page)
+print(path)
